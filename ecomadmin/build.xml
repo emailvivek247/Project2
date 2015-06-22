@@ -1,7 +1,7 @@
 <project name="ecomadmin" default="buildwar" basedir=".">
 	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask"/>
 	<property file="build.properties"/>
-	<property name="dist"                value="${basedir}\dist"/>
+	<property name="dist"                value="${basedir}/dist"/>
 	<property name="storetype"           value="${storetype}"/>
 	<property name="keystore"            value="${keystore}"/>
 	<property name="alias"               value="${alias}"/>
@@ -11,9 +11,9 @@
 	<property name="webcontent.web-inf"  value="${webcontent}/WEB-INF/"/>
 	<property name="webcontent.lib" 	 value="${webcontent.web-inf}/lib"/>
 	<property name="reports"             value="${basedir}/WebContent/reports/"/>
-	<property name="server-conf"         value="${webcontent.web-inf}\conf\spring\properties\server.properties"/>
-    <property name="build_info"          value="${basedir}\resources\build.properties"/>
-	<property name="atomikos-conf"       value="${basedir}\resources\transactions.properties"/>
+	<property name="server-conf"         value="${webcontent.web-inf}/conf/spring/properties/server.properties"/>
+    <property name="build_info"          value="${basedir}/resources/build.properties"/>
+	<property name="atomikos-conf"       value="${basedir}/resources/transactions.properties"/>
 
     <target name="revision" unless="increment.revision" >
         <propertyfile  file="${build_info}">
@@ -70,7 +70,7 @@
 	<path id="cxf.classpath">
 		<fileset dir="${webcontent.lib}">
 			<include name="**/*.jar" />
-			<include name="${webcontent.web-inf}\lib\cxf-2.6.2.jar" />
+			<include name="${webcontent.web-inf}/lib/cxf-2.6.2.jar" />
 		</fileset>
 		<fileset dir="${WSlib}">
 			<include name="**/*.jar" />
@@ -126,7 +126,7 @@
 			<entry  key="com.atomikos.icatch.log_base_dir" value="${atomikos.base_dir}" />
 			<entry  key="com.atomikos.icatch.tm_unique_name" value="${com.atomikos.icatch.tm_unique_name}" />
 		</propertyfile>
-		<xmltask source="${basedir}\resources\logback.xml" dest="${basedir}\resources\logback.xml" failWithoutMatch="true">
+		<xmltask source="${basedir}/resources/logback.xml" dest="${basedir}/resources/logback.xml" failWithoutMatch="true">
 			<replace path="/configuration/appender/file/text()" withText="${logfileprefix}"/>
 			<replace path="/configuration/appender/rollingPolicy/fileNamePattern/text()" withText="${logfileprefixpattern}"/>
 			<replace path="/configuration/appender/subject/text()" withText="${logfileSubject}" />
@@ -149,12 +149,12 @@
 		<tstamp>
 			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
 		</tstamp>
-		<jar jarfile="${webcontent}\applets\ReportApplet.jar" compress="true">
+		<jar jarfile="${webcontent}/applets/ReportApplet.jar" compress="true">
 			<fileset dir="build/classes">
-				<include name="com\fdt\ecomadmin\applet\*.class" />
+				<include name="com/fdt/ecomadmin/applet/*.class" />
 			</fileset>
 			<fileset dir="${java.src}">
-				<include name="com\fdt\ecomadmin\applet\IDAutomationMICR.ttf" />
+				<include name="com/fdt/ecomadmin/applet/IDAutomationMICR.ttf" />
 			</fileset>
 			 <manifest>
 	            <attribute name="Application-Name" value="accept"/>
@@ -163,57 +163,57 @@
 	            <attribute name="Permissions" value="all-permissions"/>
 	        </manifest>
 		</jar>
-		<signjar jar="${webcontent}\applets\ReportApplet.jar"
+		<signjar jar="${webcontent}/applets/ReportApplet.jar"
 				 storetype = "${storetype}"
 				 keystore = "${keystore}"
 				 alias="${alias}"
 				 storepass="${storepass}" />
-		<signjar jar="${webcontent}\applets\jasperreports-applet-5.5.0.jar"
+		<signjar jar="${webcontent}/applets/jasperreports-applet-5.5.0.jar"
 						 storetype = "${storetype}"
 						 keystore = "${keystore}"
 						 alias="${alias}"
 						 storepass="${storepass}"/>
-		<signjar jar="${webcontent}\applets\jasperreports-fonts-5.5.0.jar"
+		<signjar jar="${webcontent}/applets/jasperreports-fonts-5.5.0.jar"
 								 storetype = "${storetype}"
 								 keystore = "${keystore}"
 								 alias="${alias}"
 								 storepass="${storepass}"/>
-		<signjar jar="${webcontent}\applets\iText-2.1.7.jar"
+		<signjar jar="${webcontent}/applets/iText-2.1.7.jar"
 					 storetype = "${storetype}"
 					 keystore = "${keystore}"
 					 alias="${alias}"
 		storepass="${storepass}"/>
-		<signjar jar="${webcontent}\applets\poi-3.6.jar"
+		<signjar jar="${webcontent}/applets/poi-3.6.jar"
 					 storetype = "${storetype}"
 					 keystore = "${keystore}"
 					 alias="${alias}"
 		storepass="${storepass}"/>
-		<signjar jar="${webcontent}\applets\poi-ooxml-3.6-20091214.jar"
+		<signjar jar="${webcontent}/applets/poi-ooxml-3.6-20091214.jar"
 					 storetype = "${storetype}"
 					 keystore = "${keystore}"
 					 alias="${alias}"
 		storepass="${storepass}"/>
-		<signjar jar="${webcontent}\applets\commons-logging-1.1.1.jar"
+		<signjar jar="${webcontent}/applets/commons-logging-1.1.1.jar"
 				 storetype = "${storetype}"
 				 keystore = "${keystore}"
 				 alias="${alias}"
 				 storepass="${storepass}"/>
-		<signjar jar="${webcontent}\applets\commons-collections-3.2.1.jar"
+		<signjar jar="${webcontent}/applets/commons-collections-3.2.1.jar"
 				 storetype = "${storetype}"
 				 keystore = "${keystore}"
 				 alias="${alias}"
 				 storepass="${storepass}"/>
-		<signjar jar="${webcontent}\applets\commons-digester-1.7.jar"
+		<signjar jar="${webcontent}/applets/commons-digester-1.7.jar"
 						 storetype = "${storetype}"
 						 keystore = "${keystore}"
 						 alias="${alias}"
 						 storepass="${storepass}"/>
-		<signjar jar="${webcontent}\applets\servlet-api.jar"
+		<signjar jar="${webcontent}/applets/servlet-api.jar"
 								 storetype = "${storetype}"
 								 keystore = "${keystore}"
 								 alias="${alias}"
 								 storepass="${storepass}"/>
-		<signjar jar="${webcontent}\applets\commons-lang-2.6.jar"
+		<signjar jar="${webcontent}/applets/commons-lang-2.6.jar"
 						 storetype = "${storetype}"
 						 keystore = "${keystore}"
 						 alias="${alias}"
@@ -239,7 +239,7 @@
 		<tstamp>
 			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
 		</tstamp>
-		<jar jarfile="dist\lib\ecomadmin.jar" compress="true">
+		<jar jarfile="dist/lib/ecomadmin.jar" compress="true">
 			<fileset dir="build/classes">
 				<exclude name="com/fdt/ecomadmin/applet/**/*" />
 			</fileset>
