@@ -572,7 +572,7 @@
                             { field: "username", title:"Username", width: 200},
                             { field: "phone", title: "Phone"},
                             { field: "isFirmAccessAdmin", title: "Firm Admin", template: "#= isFirmAccessAdmin ? 'Yes' : 'No' #", width: 80 },
-                            { field: "subscriptionAction", title: "Admin Actions", width: 100, template : function(d){ return getActionLink(d);} }
+                            { field: "subscriptionAction", title: "Admin Actions", width: 100, template : <#if SystemUtil.isInternalUser(request)> function(d){ return getActionLinkForInternalUser(d);} <#else>  function(d){ return getActionLink(d);} </#if> }
                         ]
                     });
 
@@ -844,7 +844,7 @@
 	});  //end DOCUMENT.READY
 
 
- 	function getActionLink(firmUser){
+ 	function getActionLinkForInternalUser(firmUser){
 		// If no Subscription is selected then no action can be performed on access
 		var contents = '';
 		if(firmUser.isFirmAccessAdmin == false){
@@ -868,6 +868,27 @@
 				contents = contents +
 				'<span><a style="cursor:pointer;" onclick="lockUnlockFirmUserPrompt(\'' + firmUser.username + '\', true, \'' + firmUser.nodeName + '\'); return false;"><img src="resources/images/lock.png" alt="Lock User" title="Lock User"></a></span>';
 			}
+		}
+		return contents;
+	}
+
+	function getActionLink(firmUser){
+		// If no Subscription is selected then no action can be performed on access
+		var contents = '';
+		if(firmUser.isFirmAccessAdmin == false){
+			contents = contents +  '<span><a class="changeAdministrator" style="cursor:pointer;" onclick="changeAdministrator(\'' + $("#username").val() + '\', \'' + firmUser.username + '\',' + firmUser.accessId + '); return false;"><img src="resources/images/MakeAdmin.png" alt="Make An Administrator" title="Make An Administrator"></a></span>';
+			if(firmUser.userAccessActive == true){
+				// Disable Link
+					contents = contents +
+						'<span><a class="cancelSubscription" style="cursor:pointer;" onclick="enableDisableFirmSubscriptionPrompt(\'' + firmUser.username + '\', ' + firmUser.userAccessId + ', \'' + $("#username").val() + '\', false); return false;"><img src="resources/images/remove.png" alt="Disable Subscription" title="Disable Subscription"></a></span>';
+			} else if (firmUser.userAccessActive == false){
+				// Enable Link
+				contents = contents +
+					'<span><a class="enableAccess" style="cursor:pointer;" onclick="enableDisableFirmSubscriptionPrompt(\'' + firmUser.username + '\', ' + firmUser.userAccessId + ', \'' + $("#username").val() + '\', true); return false;"><img src="resources/images/accept.png" alt="Enable Subscription" title="Enable Subscription"></a></span>';
+			}
+			// add remove Link
+			contents = contents +
+				'<span><a class="removeAccess" style="cursor:pointer;" onclick="removeFirmLevelAccessPrompt(\'' + firmUser.username + '\', ' + firmUser.userAccessId + '); return false;"><img src="resources/images/delete.png" alt="Remove Subscription" title="Remove Subscription"></a></span>';			
 		}
 		return contents;
 	}
