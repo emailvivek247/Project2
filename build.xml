@@ -85,7 +85,6 @@
         <fileset dir="ant-lib" includes="*.jar"/>
     </path>
 
-    <taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask" classpathref="jasper.compile.classpath"/>
     <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltask.lib.path"/>
 
     <target name="clean">
@@ -272,6 +271,7 @@
     </target>
 
     <target name="compileJasperReports" depends="buildjar">
+        <taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask" classpathref="jasper.compile.classpath"/>
         <jrc srcdir="${reports}" destdir="${reports}" tempdir="${reports}" keepjava="false" xmlvalidation="true">
             <classpath refid="jasper.compile.classpath"/>
             <include name="**/*.jrxml"/>
