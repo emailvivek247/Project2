@@ -1,0 +1,28 @@
+language: java
+before_install: ant init-xmltask
+install:
+  - mkdir ecom
+  - cd ecom
+  - git clone git@github.com:Granicus/eAccept-eCom.git
+  - git checkout ${TRAVIS_BRANCH}
+  - ant buildjar
+  - cp dist/ecomclient.jar WebContent/WEB-INF/lib/
+script: ant buildwar
+jdk:
+  - oraclejdk8
+env:
+  global:
+    - ARTIFACTS_KEY=AKIAJF225RQRARLOD63Q
+    - ARTIFACTS_SECRET=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
+    - ARTIFACTS_BUCKET=granicus-development-builds
+  matrix:
+    - ENV_NAME=node-1-test
+    - ENV_NAME=node-2-test
+addons:
+  artifacts:
+    debug: true
+    paths:
+      - $(find dist/ -type f | tr "\n" ":")
+    working_dir: dist
+    target_paths: eaccept-ecomadmin/${TRAVIS_COMMIT:0:7}/${ENV_NAME}
+    s3_region: us-west-1

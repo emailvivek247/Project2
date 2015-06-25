@@ -1,6 +1,9 @@
 <project name="ecomadmin" default="buildwar" basedir=".">
-	<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask"/>
-	<property file="build.properties"/>
+
+    <property environment="env"/>
+    <property file="build-props/${env.ENV_NAME}.build.properties"/>
+    <property file="build.properties"/>
+
 	<property name="dist"                value="${basedir}/dist"/>
 	<property name="storetype"           value="${storetype}"/>
 	<property name="keystore"            value="${keystore}"/>
@@ -93,7 +96,19 @@
 		<mkdir dir="${java.clientStub.src}" />
 	</target>
 
-	<target name="ConfUpdate" depends="init" >
+    <target name="download-xmltask">
+        <mkdir dir="ant-lib" />
+        <get src="http://downloads.sourceforge.net/project/xmltask/xmltask/1.16/xmltask.jar" dest="ant-lib" usetimestamp="true"/>
+    </target>
+
+    <target name="init-xmltask" depends="download-xmltask">
+        <path id="xmltask.lib.path">
+            <fileset dir="ant-lib" includes="*.jar"/>
+        </path>
+        <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltask.lib.path"/>
+    </target>
+
+	<target name="ConfUpdate" depends="init,init-xmltask" >
 		<propertyfile file="${server-conf}" >
 			<entry  key="jdbc.url" value="${jdbc.url}" />
 			<entry  key="jdbc.username" value="${jdbc.username}"/>
