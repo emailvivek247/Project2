@@ -1,13 +1,13 @@
 language: java
-# install:
-#   - mkdir src-dependencies
-#   - cd src-dependencies
-#   - git clone git@github.com:Granicus/eAccept-eCom.git
-#   - cd eAccept-eCom
-#   - git checkout ${TRAVIS_BRANCH}
-#   - ant buildjar
-#   - cp dist/ecomclient.jar WebContent/WEB-INF/lib/
-#   - cd ${TRAVIS_BUILD_DIR}
+install:
+  - mkdir src-dependencies
+  - cd src-dependencies
+  - git clone git@github.com:Granicus/eAccept-eCom.git
+  - cd eAccept-eCom
+  - git checkout ${TRAVIS_BRANCH}
+  - ant buildjar
+  - cp dist/ecomclient.jar WebContent/WEB-INF/lib/
+  - cd ${TRAVIS_BUILD_DIR}
 script: ant buildwar
 jdk:
   - oraclejdk8
