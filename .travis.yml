@@ -13,8 +13,8 @@ jdk:
   - oraclejdk8
 env:
   global:
-    - ARTIFACTS_KEY=AKIAJF225RQRARLOD63Q
-    - ARTIFACTS_SECRET=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
+    - secure: "ZMIie75U7/63lNFnLCivbUB9jGi4dYPSF+TNH4uNUIgYoYhy1wttmimLnMeAJIDQeVKOFWYKdCVZVPB8YsG2YGC1u3Jvd2rNXNCh5eT10NX/iaJGJD6J1pINttC5xjwzj6u/HjsKAAlCuoYPlFazWiVGOwO6u6cPrs7Jw468pnc=" #ARTIFACTS_KEY
+    - secure: "YhsE3W3eHGYZcpKVD5CcEyNNekBuEyhEwWlt+d6CLe7L+yFfKdAE60M8j6Bn1qXcfUE0VBn+alKnHS+JpPpFq61RQx+7qWijKeUnVRQu6L1YCNb5lRc4YOj8M/PLdwcyMzxw3AxBYBrDeZmwtMRISblXPRGtgkDMnpRTaIHGJkY=" #ARTIFACTS_SECRET
     - ARTIFACTS_BUCKET=granicus-development-builds
   matrix:
     - ENV_NAME=node-1-test
