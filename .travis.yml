@@ -1,4 +1,6 @@
 language: java
+jdk:
+  - oraclejdk8
 install:
   - mkdir src-dependencies
   - cd src-dependencies
@@ -8,8 +10,6 @@ install:
   - ant buildjar
   - cp dist/ecomclient.jar ${TRAVIS_BUILD_DIR}/WebContent/WEB-INF/lib/
   - cd ${TRAVIS_BUILD_DIR}
-jdk:
-  - oraclejdk8
 env:
   global:
     - secure: "JXj0nhcT2LCIqnfYlfhYIFxDSyXGL34RDvDXxSl8h+OqreEy+wFdxXQ/Fs3RoUoJ0n90vvA3DzbMpWXtuBZTtFrXS9nCgfbEwsfLQ6sly+PnaeicXwu+qsFHUhdYhwQxO3PV+iEJJSn8ZKc/sKBkg+b7myAq1+OOJSb9iWyNP6U=" #SECRET
@@ -19,6 +19,8 @@ env:
   matrix:
     - ENV_NAME=node-1-test
     - ENV_NAME=node-2-test
+    - ENV_NAME=node-1-prod
+    - ENV_NAME=node-2-prod
 before_install: gem install travis-chef && travis-chef prepare
 script: travis-chef
 branches:
