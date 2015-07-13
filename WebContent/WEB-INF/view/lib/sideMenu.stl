@@ -159,9 +159,9 @@ border-image-repeat: initial;
 								</#if>
 								<#if SystemUtil.isPSOSuperAdmin(request) || SystemUtil.isPSOTxAdmin(request) || request.isUserInRole("C_PAYASUGOTX_ADMIN")>
 									<li <#if topMenu == "reports" && subMenu == "detailDocumentTrans">class="active"</#if>>
-										<a id="detailDocumentHist" title="View Detail Document Report" href="viewDetailDocumentTransactions.admin">
+										<a id="detailDocumentHist" title="View Detail Document Transaction Report" href="viewDetailDocumentTransactions.admin">
 										<i class="icon-angle-double-right"></i>
-										Detail Document Report
+										Detail Transaction Report
 										</a>
 									</li>
 								</#if>

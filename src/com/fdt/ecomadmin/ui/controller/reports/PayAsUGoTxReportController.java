@@ -33,7 +33,7 @@ public class PayAsUGoTxReportController extends AbstractReportController {
         return this.viewTransactions(request, PAYASUGO_REPORT_HTML_VIEW, TOP_REPORTS, SUB_REPORTS_PAYASUGO_TRANS);
     }
 
-	@Link(label="Detail Document Report", family="ACCEPTADMIN", parent = "Home" )
+	@Link(label="Detail Transaction Report", family="ACCEPTADMIN", parent = "Home" )
     @RequestMapping(value="/viewDetailDocumentTransactions.admin")
     public ModelAndView viewDetailDocumentTransactions(HttpServletRequest request) {
         return this.viewTransactions(request, DETAIL_DOCUMENT_TRANSACTIONS_HTML_VIEW, TOP_REPORTS, SUB_REPORTS_DETAIL_DOCUMENT_TRANS);
