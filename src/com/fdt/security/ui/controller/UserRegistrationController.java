@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import net.tanesha.recaptcha.ReCaptcha;
 import net.tanesha.recaptcha.ReCaptchaResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -81,17 +82,16 @@ public class UserRegistrationController extends AbstractBaseController {
 			if(matcher.find()){
 				bindingResult.rejectValue("username", "security.invalidEmail.username");
 			}
-			
+			if (validateEmail(userRegistrationForm.getUsername())) {
+				bindingResult.rejectValue("username", "security.invalidEmail.username");
+			}
 			convertPasswordError(bindingResult);
 			if (bindingResult.hasErrors()) {
 				setModelAndViewForError(modelAndView, request);
 				return modelAndView;
 			}
-			//Temporary fix to remove the trailing . at the end of email address
-			if (userRegistrationForm.getUsername().endsWith(".")) {
-				userRegistrationForm.setUsername(userRegistrationForm.getUsername().substring(0,
-					userRegistrationForm.getUsername().length() - 1));
-			}
+			
+			
 			this.registerUser(userRegistrationForm, request);
 			String successMsg = this.getMessage("security.authentication.success");
 			modelAndView.addObject(SUCCESS_MSG , successMsg);
@@ -156,5 +156,18 @@ public class UserRegistrationController extends AbstractBaseController {
 		modelAndView.addObject("sites", this.getServiceStub().getSites());
 		modelAndView.addObject("selectedSites", siteIds);
 		modelAndView.setViewName(SIGNUP);
+	}
+	
+	private static boolean validateEmail(String username) {
+		if(StringUtils.isBlank(username)){
+			return true;
+		}
+		if(username.endsWith(".")) {
+			return true;
+		}
+		if(username.contains("&") || username.contains("\"") || username.contains("/") || username.contains("\\") || username.contains("'")) {
+			return true;
+		}
+		return false;
 	}
 }
