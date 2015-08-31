@@ -599,8 +599,26 @@
 						 }
 	             	},
 	             	group: { field: "siteDescription" },
-                    pageSize: 5
-	            });
+                    pageSize: 10,
+                     schema  : {
+                        model: {
+                            fields: {
+                                transactionDate: { type: 'date' },
+                                id: { type: 'number' },
+                                txRefNum: { type: 'string' },
+                                baseAmount: { type: 'number' },
+                                settlementStatus: { type: 'string' },
+                                transactionType: { type: 'string' },
+                                cardNumber: { type: 'number' },
+                                accountName: { type: 'string' },
+                                siteDescription: { type: 'string' },
+                                accessDescription: { type: 'string' },
+                                createdBy: { type: 'string' }
+                            }
+                        }
+                    }
+           			});
+	           
 
 				$("#grid_recurring").kendoGrid({
                     dataSource: dataSource_recurring,
@@ -622,7 +640,7 @@
                 		input: true
                     },
                     columns: [
-                        { field: "transactionDate", title: "Transaction Date"},
+                        { field: "transactionDate", title: "Transaction Date", format: "{0:MM/dd/yyyy hh:mm tt}", parseFormats: ["MM/dd/yyyy h:mm:ss"] },
                         { field: "txRefNum", title: "Transaction Number", template:"<a href='viewtransactiondetails.admin?transactionRefNum=#=txRefNum#&paymentChannel=RECURRING' target='_blank'>#=txRefNum#</a>"},
                         { field: "siteDescription", title: "Site Name"},
                         { field: "accessDescription", title: "Subscription"},
@@ -656,8 +674,26 @@
 					        type: "GET"
 						 }
 	             	},
-                    pageSize: 5
-	            });
+	             	group: { field: "siteDescription" },
+                    pageSize: 10,
+                     schema  : {
+                        model: {
+                            fields: {
+                                transactionDate: { type: 'date' },
+                                id: { type: 'number' },
+                                txRefNum: { type: 'string' },
+                                totalTxAmount: { type: 'number' },
+                                transactionType: { type: 'string' },
+                                cardNumber: { type: 'number' },
+                                accountName: { type: 'string' },
+                                siteDescription: { type: 'string' },
+                                accessDescription: { type: 'string' },
+                                itemsPurchased: { type: 'string' },
+                                createdBy: { type: 'string' }
+                            }
+                        }
+                    }
+           			});
 
 				$("#grid_payAsYouGo").kendoGrid({
                     dataSource: dataSource_payAsYouGo,
@@ -679,7 +715,7 @@
                 		input: true
                     },
                     columns: [
-                        { field: "transactionDate", title: "Transaction Date"},
+                        { field: "transactionDate", title: "Transaction Date", format: "{0:MM/dd/yyyy hh:mm tt}", parseFormats: ["MM/dd/yyyy h:mm:ss"] },
                         { field: "txRefNum", title: "Transaction Number", template:"<a href='viewtransactiondetails.admin?transactionRefNum=#=txRefNum#&paymentChannel=PAYASUGO' target='_blank' >#=txRefNum#</a>"},
                         { field: "siteDescription", title: "Site Name"},
                         { field: "accessDescription", title: "Subscription"},
