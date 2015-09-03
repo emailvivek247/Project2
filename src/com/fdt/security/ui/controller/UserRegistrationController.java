@@ -82,8 +82,16 @@ public class UserRegistrationController extends AbstractBaseController {
 			if(matcher.find()){
 				bindingResult.rejectValue("username", "security.invalidEmail.username");
 			}
+			if (bindingResult.hasErrors()) {
+				setModelAndViewForError(modelAndView, request);
+				return modelAndView;
+			}
 			if (validateEmail(userRegistrationForm.getUsername())) {
 				bindingResult.rejectValue("username", "security.invalidEmail.username");
+			}
+			if (bindingResult.hasErrors()) {
+				setModelAndViewForError(modelAndView, request);
+				return modelAndView;
 			}
 			convertPasswordError(bindingResult);
 			if (bindingResult.hasErrors()) {
