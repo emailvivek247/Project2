@@ -340,6 +340,7 @@ font-size: 13px;
 															<#if paymentChannel = "RECURRING" || paymentChannel = "PAYASUGO">
 																<th filter='false' style="text-align:center;">Page(s)</th>
 															</#if>
+																<th filter='false' style="text-align:center;">Comments</th>
 																<th filter='false' style="text-align:center;">Amount</th>
 																<th filter='false' style="text-align:center;">Service Fee</th>
 																<th filter='false' style="text-align:center;">Tax</th>
@@ -360,6 +361,7 @@ font-size: 13px;
 															<#if paymentChannel = "OTC" || paymentChannel = "PAYASUGO">
 																<td style="text-align:center;"><#if purchasedItem.getPageCount()?has_content>${purchasedItem.getPageCount()}</#if></td>
 															</#if>
+																<td style="text-align:center;"><#if purchasedItem.getComments()?has_content>${purchasedItem.getComments()}</#if></td>
 																<td style="text-align:right;"><#if purchasedItem.getTotalTxAmount()?has_content>${purchasedItem.getBaseAmount()?string.currency}</#if></td>
 																<td style="text-align:right;"><#if purchasedItem.getTotalTxAmount()?has_content>${purchasedItem.getServiceFee()?string.currency}</#if></td>
 																<td style="text-align:right;"><#if purchasedItem.getTotalTxAmount()?has_content>${purchasedItem.getTax()?string.currency}</#if></td>
