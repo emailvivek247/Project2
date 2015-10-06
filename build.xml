@@ -5,6 +5,7 @@
     <property file="build.properties"/>
 
     <property name="dist"                value="${basedir}/dist"/>
+    <property name="build"               value="${basedir}/build"/>
     <property name="storetype"           value="${storetype}"/>
     <property name="keystore"            value="${keystore}"/>
     <property name="alias"               value="${alias}"/>
@@ -18,44 +19,13 @@
     <property name="build_info"          value="${basedir}/resources/build.properties"/>
     <property name="atomikos-conf"       value="${basedir}/resources/transactions.properties"/>
 
-    <target name="revision" unless="increment.revision" >
-        <propertyfile  file="${build_info}">
-            <entry key="build.revision.number" type="int" operation="+" value="1" pattern="000"/>
-        </propertyfile>
-    </target>
-
-    <target name="minor" unless="increment.minor" >
-        <propertyfile  file="${build_info}">
-            <entry key="build.minor.number" type="int" operation="+" value="1" pattern="0"/>
-            <entry key="build.revision.number" type="int" value="0" pattern="000"/>
-        </propertyfile>
-    </target>
-
-    <target name="major" unless="increment.major" >
-        <propertyfile  file="${build_info}">
-            <entry key="build.major.number" type="int" operation="+" value="1" pattern="0"/>
-            <entry key="build.minor.number" type="int" value="0" pattern="0"/>
-            <entry key="build.revision.number" type="int" value="0" pattern="000"/>
-        </propertyfile>
-    </target>
-
-    <target name="all" unless="increment.all">
-        <propertyfile file="${build_info}">
-            <entry key="build.major.number" type="int" operation="+" value="1" pattern="0" />
-            <entry key="build.minor.number" type="int" operation="+" value="1" pattern="0" />
-            <entry key="build.revision.number" type="int" operation="+" value="1" pattern="000" />
-        </propertyfile>
-    </target>
-
     <tstamp>
         <format property="buildDate" pattern="MM-dd-yyyy HH:mm a" />
     </tstamp>
 
-    <target name="buildDate" unless="increment.buildDate" >
-        <propertyfile  file="${build_info}">
-            <entry key="build.date" value="${buildDate}"/>
-        </propertyfile>
-    </target>
+    <path id="ant.lib.path">
+        <fileset dir="ant-lib" includes="*.jar"/>
+    </path>
 
     <path id="compile.classpath">
         <fileset dir="${webcontent.lib}">
@@ -71,34 +41,74 @@
         <pathelement location="${webcontent.web-inf}/classes"/>
     </path>
 
-    <path id="cxf.classpath">
-        <fileset dir="${webcontent.lib}">
-            <include name="**/*.jar" />
-            <include name="${webcontent.web-inf}/lib/cxf-2.6.2.jar" />
-        </fileset>
-        <fileset dir="${WSlib}">
-            <include name="**/*.jar" />
-        </fileset>
-    </path>
+    <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="ant.lib.path"/>
+    <taskdef name="ivy-configure" classname="org.apache.ivy.ant.IvyConfigure" classpathref="ant.lib.path"/>
+    <taskdef name="ivy-resolve" classname="org.apache.ivy.ant.IvyResolve" classpathref="ant.lib.path"/>
+    <taskdef name="ivy-retrieve" classname="org.apache.ivy.ant.IvyRetrieve" classpathref="ant.lib.path"/>
+    <taskdef name="ivy-publish" classname="org.apache.ivy.ant.IvyPublish" classpathref="ant.lib.path"/>
+    <taskdef name="ivy-report" classname="org.apache.ivy.ant.IvyReport" classpathref="ant.lib.path"/>
 
-    <path id="xmltask.lib.path">
-        <fileset dir="ant-lib" includes="*.jar"/>
-    </path>
+    <target name="revision" unless="increment.revision" >
+        <propertyfile file="${build_info}">
+            <entry key="build.revision.number" type="int" operation="+" value="1" pattern="000"/>
+        </propertyfile>
+    </target>
 
-    <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="xmltask.lib.path"/>
+    <target name="minor" unless="increment.minor" >
+        <propertyfile file="${build_info}">
+            <entry key="build.minor.number" type="int" operation="+" value="1" pattern="0"/>
+            <entry key="build.revision.number" type="int" value="0" pattern="000"/>
+        </propertyfile>
+    </target>
+
+    <target name="major" unless="increment.major" >
+        <propertyfile file="${build_info}">
+            <entry key="build.major.number" type="int" operation="+" value="1" pattern="0"/>
+            <entry key="build.minor.number" type="int" value="0" pattern="0"/>
+            <entry key="build.revision.number" type="int" value="0" pattern="000"/>
+        </propertyfile>
+    </target>
+
+    <target name="all" unless="increment.all">
+        <propertyfile file="${build_info}">
+            <entry key="build.major.number" type="int" operation="+" value="1" pattern="0" />
+            <entry key="build.minor.number" type="int" operation="+" value="1" pattern="0" />
+            <entry key="build.revision.number" type="int" operation="+" value="1" pattern="000" />
+        </propertyfile>
+    </target>
+
+    <target name="buildDate" unless="increment.buildDate" >
+        <propertyfile  file="${build_info}">
+            <entry key="build.date" value="${buildDate}"/>
+        </propertyfile>
+    </target>
 
     <target name="clean">
-        <delete dir="dist"/>
-        <delete dir="build"/>
-    </target>
+        <delete dir="${dist}"/>
+        <delete dir="${build}"/>
+        <delete dir="${webcontent.lib}"/>
+     </target>
 
     <target name="init" depends="clean">
-        <mkdir dir="build/classes"/>
-        <mkdir dir="dist"/>
-        <mkdir dir="dist/lib"/>
+        <mkdir dir="${dist}"/>
+        <mkdir dir="${dist}/build/classes"/>
+        <mkdir dir="${webcontent.lib}"/>
     </target>
 
-    <target name="ConfUpdate" depends="init">
+    <target name="resolve-dependencies" depends="init" description="Copy private dependencies from lib and retrieve Ivy dependencies">
+        <copy todir="${webcontent.lib}">
+            <fileset dir="${basedir}/lib">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+        <ivy-retrieve conf="ecomadmin" pattern="${webcontent.lib}/[artifact]-[revision].[ext]"/>
+    </target>
+
+    <target name="report-dependencies" depends="resolve-dependencies" description="Generates an Ivy report">
+        <ivy-report todir="${dist}"/>
+    </target>
+
+    <target name="conf-update" depends="init">
         <propertyfile file="${server-conf}" >
             <entry key="jdbc.url" value="${jdbc.url}" />
             <entry key="jdbc.username" value="${jdbc.username}"/>
@@ -144,8 +154,8 @@
         </xmltask>
     </target>
 
-    <target name="compile" depends="ConfUpdate">
-        <javac destdir="build/classes" debug="true" srcdir="${java.src}" encoding="utf-8">
+    <target name="compile" depends="conf-update,resolve-dependencies">
+        <javac destdir="${build}/classes" debug="true" srcdir="${java.src}" encoding="utf-8">
             <classpath refid="compile.classpath"/>
         </javac>
     </target>
@@ -155,7 +165,7 @@
             <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
         </tstamp>
         <jar jarfile="${webcontent}/applets/ReportApplet.jar" compress="true">
-            <fileset dir="build/classes">
+            <fileset dir="${build}/classes">
                 <include name="com/fdt/ecomadmin/applet/*.class" />
             </fileset>
             <fileset dir="${java.src}">
@@ -235,27 +245,12 @@
             storepass="${storepass}"/>
     </target>
 
-    <target name="cxfWSDLToJava"  depends="init">
-        <java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
-            <arg value="-client"/>
-            <arg value="-b"/>
-            <arg value="binding.xml"/>
-            <arg value="-d"/>
-            <arg value="${java.clientStub.src}"/>
-            <arg value="-compile" />
-            <arg value="${wsdl}"/>
-            <classpath>
-                <path refid="cxf.classpath"/>
-            </classpath>
-        </java>
-    </target>
-
     <target name="buildjar" depends="compile">
         <tstamp>
             <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
         </tstamp>
-        <jar jarfile="dist/lib/ecomadmin.jar" compress="true">
-            <fileset dir="build/classes">
+        <jar jarfile="${dist}/lib/ecomadmin.jar" compress="true">
+            <fileset dir="${build}/classes">
                 <exclude name="com/fdt/ecomadmin/applet/**/*" />
             </fileset>
         </jar>
