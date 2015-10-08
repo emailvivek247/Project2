@@ -8,7 +8,7 @@ install:
   - cd eAccept-eCom
   - git checkout ${TRAVIS_BRANCH}
   - ant buildjar
-  - cp dist/ecomclient.jar  ${TRAVIS_BUILD_DIR}/WebContent/WEB-INF/lib/
+  - cp dist/ecomclient.jar ${TRAVIS_BUILD_DIR}/lib
   - cd ${TRAVIS_BUILD_DIR}
 env:
   global:
