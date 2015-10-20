@@ -132,8 +132,7 @@
             <entry key="com.atomikos.icatch.tm_unique_name" value="${com.atomikos.icatch.tm_unique_name}" />
         </propertyfile>
         <xmltask source="${basedir}/resources/logback.xml" dest="${basedir}/resources/logback.xml" failWithoutMatch="true">
-            <replace path="/configuration/appender/file/text()" withText="${logfileprefix}"/>
-            <replace path="/configuration/appender/rollingPolicy/fileNamePattern/text()" withText="${logfileprefixpattern}"/>
+            <attr path="/configuration/property" attr="value" value="${logfileprefix}" />
             <replace path="/configuration/appender/subject/text()" withText="${logfileSubject}" />
             <replace path="/configuration/appender/to/text()" withText="${toEmail}" />
             <replace path="/configuration/appender/from/text()" withText="${fromEmail}" />
