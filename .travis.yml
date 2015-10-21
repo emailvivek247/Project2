@@ -1,0 +1,39 @@
+language: java
+jdk:
+  - oraclejdk8
+install:
+  - mkdir src-dependencies
+  - cd src-dependencies
+  - git clone git@github.com:Granicus/eAccept-eCom.git
+  - cd eAccept-eCom
+  - git checkout ${TRAVIS_BRANCH}
+  - ant buildjar
+  - cp dist/ecomclient.jar  ${TRAVIS_BUILD_DIR}/WebContent/WEB-INF/lib/
+  - cd ${TRAVIS_BUILD_DIR}
+env:
+  global:
+    - secure: "JXj0nhcT2LCIqnfYlfhYIFxDSyXGL34RDvDXxSl8h+OqreEy+wFdxXQ/Fs3RoUoJ0n90vvA3DzbMpWXtuBZTtFrXS9nCgfbEwsfLQ6sly+PnaeicXwu+qsFHUhdYhwQxO3PV+iEJJSn8ZKc/sKBkg+b7myAq1+OOJSb9iWyNP6U=" #SECRET
+    - secure: "ZMIie75U7/63lNFnLCivbUB9jGi4dYPSF+TNH4uNUIgYoYhy1wttmimLnMeAJIDQeVKOFWYKdCVZVPB8YsG2YGC1u3Jvd2rNXNCh5eT10NX/iaJGJD6J1pINttC5xjwzj6u/HjsKAAlCuoYPlFazWiVGOwO6u6cPrs7Jw468pnc=" #ARTIFACTS_KEY
+    - secure: "YhsE3W3eHGYZcpKVD5CcEyNNekBuEyhEwWlt+d6CLe7L+yFfKdAE60M8j6Bn1qXcfUE0VBn+alKnHS+JpPpFq61RQx+7qWijKeUnVRQu6L1YCNb5lRc4YOj8M/PLdwcyMzxw3AxBYBrDeZmwtMRISblXPRGtgkDMnpRTaIHGJkY=" #ARTIFACTS_SECRET
+    - ARTIFACTS_BUCKET=granicus-development-builds
+  matrix:
+    - ENV_NAME=node-1-test
+    - ENV_NAME=node-2-test
+    - ENV_NAME=node-1-prod
+    - ENV_NAME=node-2-prod
+before_install: gem install travis-chef && travis-chef prepare
+script: travis-chef
+branches:
+  only:
+    - master
+    - develop
+    - /^hotfix\/.*$/
+    - /^release\/.*$/
+    - /^environment\/.*$/
+addons:
+  artifacts:
+    paths:
+      - $(find dist/ -type f | tr "\n" ":")
+    working_dir: dist
+    target_paths: eaccept-ecomadmin/${TRAVIS_COMMIT:0:7}/${ENV_NAME}
+    s3_region: us-west-1
