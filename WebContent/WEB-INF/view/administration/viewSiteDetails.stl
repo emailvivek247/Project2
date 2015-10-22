@@ -309,7 +309,7 @@ font-size: 13px;
 	<!--End fee details tab-->
 	<!--Start Merchant Fee info tab-->
 	 <div id="merchantFee" class="k-content">
-		<#if site.getMerchant()?has_content || site.getMicroMerchant()?has_content>
+		<#if site.getNormalMerchant()?has_content || site.getMicroMerchant()?has_content>
 	        <table role="grid" class="kendogrid">
 	                <thead>
 					<tr>
@@ -321,13 +321,13 @@ font-size: 13px;
 					</tr>
 				</thead>
 				<tbody>
-					<#if site.getMerchant()?has_content>
+					<#if site.getNormalMerchant()?has_content>
 					<tr>
 						<td>No</td>
-						<td >${site.getMerchant().txFeePercent}%</td>
-						<td>${site.getMerchant().txFeeFlat?string.currency}</td>
-						<td>${site.getMerchant().txFeePercentAmex}%</td>
-						<td>${site.getMerchant().txFeeFlatAmex?string.currency}</td>
+						<td >${site.getNormalMerchant().txFeePercent}%</td>
+						<td>${site.getNormalMerchant().txFeeFlat?string.currency}</td>
+						<td>${site.getNormalMerchant().txFeePercentAmex}%</td>
+						<td>${site.getNormalMerchant().txFeeFlatAmex?string.currency}</td>
 					</tr>
 					</#if>
 					<#if site.getMicroMerchant()?has_content>
@@ -347,7 +347,7 @@ font-size: 13px;
 	<!--Start Check Details tab-->
 	<#if SystemUtil.isPSOSuperAdmin(request) || request.isUserInRole("C_CHECKPRINT_ADMIN") || request.isUserInRole("C_CHECKHISTORY_ADMIN")>
 		<div id="checkDetails" class="k-content">
-		<#if site.getMerchant()?has_content || site.getMicroMerchant()?has_content>
+		<#if site.getNormalMerchant()?has_content || site.getMicroMerchant()?has_content>
 
 	            <table role="grid" class="kendogrid">
 		            <thead>
