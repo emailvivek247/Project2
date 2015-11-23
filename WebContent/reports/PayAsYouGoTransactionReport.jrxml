@@ -699,48 +699,48 @@
 								</jr:detailCell>
 							</jr:column>
 						</jr:columnGroup>
-						<jr:column width="50" uuid="5e71fab4-5f68-4ead-ad24-c6232775c488">
+						<jr:column width="50" uuid="83c8d6a7-5598-4bc5-93c1-2bfc567d34fd">
 							<jr:groupFooter groupName="NODE_NAME">
 								<jr:cell height="30" rowSpan="1">
 									<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
-										<reportElement key="gf1_2" style="table_TD" x="0" y="0" width="50" height="30" forecolor="#000099" uuid="94d60c7e-5bea-4ede-adf0-f349f6138d67"/>
+										<reportElement key="gf1_4" style="table_TD" x="0" y="0" width="50" height="30" forecolor="#000099" uuid="1ccf803e-32a0-4ed3-a4fb-c7db032b9b99"/>
 										<textElement textAlignment="Right" verticalAlignment="Middle">
 											<font size="8" isBold="true"/>
 											<paragraph rightIndent="3"/>
 										</textElement>
-										<textFieldExpression><![CDATA[$V{Amount_By_Node}]]></textFieldExpression>
+										<textFieldExpression><![CDATA[$V{TotalAmount_By_Node}]]></textFieldExpression>
 									</textField>
 								</jr:cell>
 							</jr:groupFooter>
 							<jr:groupFooter groupName="SITE_NAME">
 								<jr:cell height="30" rowSpan="1">
 									<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
-										<reportElement key="gf2_2" style="table_TD" x="0" y="0" width="50" height="30" forecolor="#000099" uuid="37a81059-645b-4c93-a07c-5fcc701466cc"/>
+										<reportElement key="gf2_4" style="table_TD" x="0" y="0" width="50" height="30" forecolor="#000099" uuid="57300f86-ad43-4d37-acc3-0f2371e86e7a"/>
 										<textElement textAlignment="Right" verticalAlignment="Middle">
 											<font size="8" isBold="true"/>
 											<paragraph rightIndent="3"/>
 										</textElement>
-										<textFieldExpression><![CDATA[$V{Amount_By_Site}]]></textFieldExpression>
+										<textFieldExpression><![CDATA[$V{TotalAmount_By_Site}]]></textFieldExpression>
 									</textField>
 								</jr:cell>
 							</jr:groupFooter>
 							<jr:columnHeader style="table 8_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement key="col13" x="0" y="0" width="50" height="30" uuid="7ed6bd8a-7d0c-4918-8b26-a4a30442319d"/>
+									<reportElement key="col15" x="0" y="0" width="50" height="30" uuid="2b0bff4b-e931-428f-ac3c-76f3ee0dd29b"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="SansSerif" size="8" isBold="true"/>
 									</textElement>
-									<text><![CDATA[Client Share]]></text>
+									<text><![CDATA[Transaction Amount]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="table 8_TD" height="20" rowSpan="1">
 								<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
-									<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="50" height="20" uuid="3cce47a8-170b-4fde-ae99-1a68146ee2a4"/>
+									<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="50" height="20" uuid="44a2eab2-9454-48d7-a7ae-64e8ec6ca15d"/>
 									<textElement textAlignment="Right" verticalAlignment="Middle">
 										<font fontName="SansSerif" size="8" isBold="false"/>
 										<paragraph rightIndent="3"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{TX_TYPE} == "CHARGE" ? $F{AMOUNT} : -$F{AMOUNT}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{TX_TYPE} == "CHARGE" ? $F{TX_AMOUNT} : -$F{TX_AMOUNT}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -789,48 +789,48 @@
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="50" uuid="83c8d6a7-5598-4bc5-93c1-2bfc567d34fd">
+						<jr:column width="50" uuid="5e71fab4-5f68-4ead-ad24-c6232775c488">
 							<jr:groupFooter groupName="NODE_NAME">
 								<jr:cell height="30" rowSpan="1">
 									<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
-										<reportElement key="gf1_4" style="table_TD" x="0" y="0" width="50" height="30" forecolor="#000099" uuid="1ccf803e-32a0-4ed3-a4fb-c7db032b9b99"/>
+										<reportElement key="gf1_2" style="table_TD" x="0" y="0" width="50" height="30" forecolor="#000099" uuid="94d60c7e-5bea-4ede-adf0-f349f6138d67"/>
 										<textElement textAlignment="Right" verticalAlignment="Middle">
 											<font size="8" isBold="true"/>
 											<paragraph rightIndent="3"/>
 										</textElement>
-										<textFieldExpression><![CDATA[$V{TotalAmount_By_Node}]]></textFieldExpression>
+										<textFieldExpression><![CDATA[$V{Amount_By_Node}]]></textFieldExpression>
 									</textField>
 								</jr:cell>
 							</jr:groupFooter>
 							<jr:groupFooter groupName="SITE_NAME">
 								<jr:cell height="30" rowSpan="1">
 									<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
-										<reportElement key="gf2_4" style="table_TD" x="0" y="0" width="50" height="30" forecolor="#000099" uuid="57300f86-ad43-4d37-acc3-0f2371e86e7a"/>
+										<reportElement key="gf2_2" style="table_TD" x="0" y="0" width="50" height="30" forecolor="#000099" uuid="37a81059-645b-4c93-a07c-5fcc701466cc"/>
 										<textElement textAlignment="Right" verticalAlignment="Middle">
 											<font size="8" isBold="true"/>
 											<paragraph rightIndent="3"/>
 										</textElement>
-										<textFieldExpression><![CDATA[$V{TotalAmount_By_Site}]]></textFieldExpression>
+										<textFieldExpression><![CDATA[$V{Amount_By_Site}]]></textFieldExpression>
 									</textField>
 								</jr:cell>
 							</jr:groupFooter>
 							<jr:columnHeader style="table 8_CH" height="30" rowSpan="1">
 								<staticText>
-									<reportElement key="col15" x="0" y="0" width="50" height="30" uuid="2b0bff4b-e931-428f-ac3c-76f3ee0dd29b"/>
+									<reportElement key="col13" x="0" y="0" width="50" height="30" uuid="7ed6bd8a-7d0c-4918-8b26-a4a30442319d"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="SansSerif" size="8" isBold="true"/>
 									</textElement>
-									<text><![CDATA[Transaction Amount]]></text>
+									<text><![CDATA[Client Share]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="table 8_TD" height="20" rowSpan="1">
 								<textField isStretchWithOverflow="true" pattern="¤ #,##0.00" isBlankWhenNull="true">
-									<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="50" height="20" uuid="44a2eab2-9454-48d7-a7ae-64e8ec6ca15d"/>
+									<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="50" height="20" uuid="3cce47a8-170b-4fde-ae99-1a68146ee2a4"/>
 									<textElement textAlignment="Right" verticalAlignment="Middle">
 										<font fontName="SansSerif" size="8" isBold="false"/>
 										<paragraph rightIndent="3"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{TX_TYPE} == "CHARGE" ? $F{TX_AMOUNT} : -$F{TX_AMOUNT}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{TX_TYPE} == "CHARGE" ? $F{AMOUNT} : -$F{AMOUNT}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>

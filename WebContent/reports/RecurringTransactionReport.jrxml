@@ -776,7 +776,7 @@
 									<textElement textAlignment="Center" verticalAlignment="Middle">
 										<font fontName="SansSerif" size="8" isBold="true"/>
 									</textElement>
-									<text><![CDATA[Transaction Cost]]></text>
+									<text><![CDATA[Service Fee]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:detailCell style="table 8_TD" height="20" rowSpan="1">
