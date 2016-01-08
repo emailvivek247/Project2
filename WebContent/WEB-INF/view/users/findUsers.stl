@@ -309,7 +309,7 @@ font-size: 13px;
                 		input: true
                 },
                 columns: [
-                    { field: "username", title: "User Name", sortable: false, width: 200},
+                    { field: "username", title: "Email", sortable: false, width: 200},
                     { field: "firmAdmin", title: "Firm Admin", template: "#= firmAdmin ? 'Yes' : 'No' #" , sortable: true},
                     { field: "firstName", title: "First Name", sortable: false, template: '#=firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase() #', attributes: {"class": "capitalize"}},
                     { field: "lastName", title: "Last Name", sortable: false, template: '#=lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase() #', attributes: {"class": "capitalize"}},
@@ -318,7 +318,7 @@ font-size: 13px;
                     { field: "payedUser", title: "Recurring User", template: "#= payedUser ? 'Yes' : 'No' #", sortable: true},
                     { field: "paymentDue", title: "Payment Due", template: "#= paymentDue ? 'Yes' : 'No' #",  sortable: true },
                     { field: "accessOverridden", title: "Access Overridden", template: "#= accessOverridden ? 'Yes' : 'No' #", sortable: true },
-                    { field: "active",  title: "Active", template: "#= active ? 'Yes' : 'No' #" , sortable: true},
+                    { field: "active",  title: "User Status", template: "#= active ? 'Yes' : 'No' #" , sortable: true},
                     { field: "accountNonLocked", title: "Account Locked", template: "#= accountNonLocked ? 'No' : 'Yes' #" , sortable: true},
                     { field: "lastLoginTimeString", title: "Last Login", sortable: true},
                     { field: "dateTimeCreatedString", title: "Date Created", sortable: true},
