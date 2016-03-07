@@ -1,12 +1,20 @@
 <#assign form  =JspTaglibs["http://www.springframework.org/tags/form"]>
 <#assign spring=JspTaglibs["http://www.springframework.org/tags"]>
 <script type="text/javascript" src="resources/js/jquery/plugins/jquery.form.js"></script>
-	<div>
-		<#if creditCardForm?has_content>
-     <@form.form id="frmccinfo" name="frmccinfo" action="" modelAttribute="creditCardForm" method="post"  autocomplete="on" >
 
-			<table width="100%">
+<div id="accordion">
+<#list creditCardList as creditCard>
+	<#assign number = creditCard.number>
+	<#assign id = creditCard.id>
+	<#assign maskedNumber = SystemUtil.getAccountNumber(creditCard)>
+	<#assign expMon = SystemUtil.getExpirationMonth(creditCard)>
+	
+  <h3>  Name On Card: <span style="color: #333">${creditCard.name}</span>   Card Type: <span style="color: #333">${creditCard.cardType}</span> ending in <span style="color: #333">${number[number?length - 4..]}</span>  Expiration Date: <span style="color: #333">${SystemUtil.getExpirationDate(creditCard)}</span> </h3>
+  <div>
+    <form id="frmccinfo" name="frmccinfo" action=""  method="post"  autocomplete="on" >
 			
+			<table width="100%">
+				<input type="hidden" id="ccid"   name="ccid"  value="${id}" />
 				<input type="hidden" id="username" value="${userName}">
 					<tr>
 						<td align="right;" width="50%">
@@ -14,38 +22,36 @@
 								<tr>
 									<td class="right"><b>Name on Card:</b></td>
 									<td class="left">
-										<@form.input path="accountName" class="validate[required,minSize[1],maxSize[50]] ADCSI_Input" spellcheck="false" tabindex="8" maxlength="50" style="width:200px;" autocomplete="on"/>
-										<@form.errors path="accountName" cssClass="sverror hidden" />
+										<input id="accountName" name="accountName" class="validate[required,minSize[1],maxSize[50]] ADCSI_Input" spellcheck="false" tabindex="8" maxlength="50" style="width:200px;" autocomplete="on" value = "${creditCard.name}"/>
+										
 									</td>
 								</tr>
 								<tr>
 									<td class="right"><b>Card Number:</b></td>
 									<td class="left">
-										<@form.input path="number" class="validate[required,custom[creditCardVMAD],minSize[15],maxSize[16]] ADCSI_Input" spellcheck="false" tabindex="10" maxlength="16" style="width:200px;" autocomplete="off" />
-							    		<@form.errors path="number" cssClass="sverror hidden" />
+										<input id="number" name="number" class="validate[required,custom[creditCardVMAD],minSize[15],maxSize[16]] ADCSI_Input" spellcheck="false" tabindex="10" maxlength="16" style="width:200px;" autocomplete="off" value = "${maskedNumber}" />
+							    		
 									</td>
 								</tr>
 								<tr>
 									<td class="right"><b>Expiration(MM/YYYY):</b></td>
 									<td class="left">
-										<@form.input path="expMonthS" style="width:45px" class="validate[required,custom[ccMonth],minSize[2],maxSize[2]] ADCSI_Input" spellcheck="false" tabindex="11" maxlength="2" autocomplete="off" />
-										<@form.errors path="expMonthS" cssClass="sverror hidden" /> /
-										<@form.input path="expYear" style="width:60px" class="validate[required,custom[ccYear],minSize[4],maxSize[4]] ADCSI_Input" spellcheck="false" tabindex="12" maxlength="4" autocomplete="off" />
-										<@form.errors path="expYear" cssClass="sverror hidden" />
+										<input id="expMonthS" name="expMonthS" style="width:45px" class="validate[required,custom[ccMonth],minSize[2],maxSize[2]] ADCSI_Input" spellcheck="false" tabindex="11" maxlength="2" autocomplete="off"  value = "${expMon}" />
+										<input id="expYear" name="expYear" style="width:60px" class="validate[required,custom[ccYear],minSize[4],maxSize[4]] ADCSI_Input" spellcheck="false" tabindex="12" maxlength="4" autocomplete="off"  value = "${creditCard.expiryYear}" />
+										
 									</td>
 								</tr>
 								<tr>
 									<td class="right"><b>Security Code:</b></td>
 									<td class="left">
-										<@form.input path="cvv" style="width:60px" class="validate[required,custom[numeric],minSize[1],maxSize[4]] ADCSI_Input" spellcheck="false" tabindex="13" maxlength="4" autocomplete="off" />
-										<@form.errors path="cvv" cssClass="sverror hidden" />
+										<input id="cvv" name="cvv" style="width:60px" class="validate[required,custom[numeric],minSize[1],maxSize[4]] ADCSI_Input" spellcheck="false" tabindex="13" maxlength="4" autocomplete="off"  />										
 									</td>
 								</tr>
 								<tr>
 									<td class="right"><b>Address Line 1:</b></td>
 									<td class="left">
-										<@form.input path="addressLine1" class="validate[required,custom[addressLine]minSize[1],maxSize[250]] ADCSI_Input" spellcheck="false" tabindex="15" maxlength="250" autocomplete="on" />
-										<@form.errors path="addressLine1" cssClass="sverror hidden" />
+										<input id="addressLine1" name="addressLine1" class="validate[required,custom[addressLine]minSize[1],maxSize[250]] ADCSI_Input" spellcheck="false" tabindex="15" maxlength="250" value = "${creditCard.addressLine1}" autocomplete="on" />
+										
 									</td>
 								</tr>
 							</table>
@@ -55,36 +61,36 @@
 								<tr>
 									<td class="right"><b>Address Line 2:</b></td>
 									<td class="left">
-										<@form.input path="addressLine2" class="ADCSI_Input" spellcheck="false" tabindex="16" maxlength="250" autocomplete="on" />
-							   			<@form.errors path="addressLine2" cssClass="sverror hidden" />
+										<input id="addressLine2" name="addressLine2" class="ADCSI_Input" spellcheck="false" tabindex="16" maxlength="250" autocomplete="on" value = "${creditCard.addressLine2}" />
+							   			
 									</td>
 								</tr>
 								<tr>
 									<td class="right"><b>City:</b></td>
 									<td class="left">
-										<@form.input path="city" class="validate[required,minSize[1],maxSize[50]] ADCSI_Input" spellcheck="false" tabindex="17" maxlength="50" autocomplete="on" />
-										<@form.errors path="city" cssClass="sverror hidden" />
+										<input id="city" name="city" class="validate[required,minSize[1],maxSize[50]] ADCSI_Input" spellcheck="false" tabindex="17" maxlength="50" autocomplete="on" value = "${creditCard.city}" />
+										
 									</td>
 								</tr>
 								<tr>
 									<td class="right"><b>State:</b></td>
 									<td class="left">
-										<@form.input path="state" class="validate[required,minSize[1],maxSize[2]] ADCSI_Input" spellcheck="false" tabindex="18" maxlength="2" style="width:45px" autocomplete="on" />
-										<@form.errors path="state" cssClass="sverror hidden" />
+										<input id="state" name="state" class="validate[required,minSize[1],maxSize[2]] ADCSI_Input" spellcheck="false" tabindex="18" maxlength="2" style="width:45px" autocomplete="on" value = "${creditCard.state}" />
+										
 									</td>
 								</tr>
 								<tr>
 									<td class="right"><b>Zip:</b></td>
 									<td class="left">
-										<@form.input path="zip" style="width:100px" class="validate[required,custom[onlyNumberSp],minSize[5],maxSize[5]] ADCSI_Input" spellcheck="false" tabindex="19" maxlength="5" autocomplete="on" />
-										<@form.errors path="zip" cssClass="sverror hidden" />
+										<input id="zip" name="zip" style="width:100px" class="validate[required,custom[onlyNumberSp],minSize[5],maxSize[5]] ADCSI_Input" spellcheck="false" tabindex="19" maxlength="5" autocomplete="on" value = "${creditCard.zip}" />
+										
 									</td>
 								</tr>
 								<tr>
 									<td class="right"><b>Phone Number:</b></td>
 									<td class="left">
-										<@form.input path="phoneNumber" class="validate[required,custom[numeric],minSize[10],maxSize[10]] ADCSI_Input" spellcheck="false" tabindex="20" maxlength="10" autocomplete="on" />
-										<@form.errors path="phoneNumber" cssClass="sverror hidden" />
+										<input  id="phoneNumber" name="phoneNumber" class="validate[required,custom[numeric],minSize[10],maxSize[10]] ADCSI_Input" spellcheck="false" tabindex="20" maxlength="10" autocomplete="on" value = "${creditCard.phone}" />
+										
 									</td>
 								</tr>
 							</table>
@@ -99,83 +105,31 @@
 								<span class="input-icon">
 									<input class="btn btn-small btn-success btn-search" type="submit" id="btnUpdateAcct" name="btnUpdateAcct" tabindex="21" value='Update'  onclick="return updateCreditCard();"/>
 									<i class="icon-check white"></i>
+									<input class="btn btn-small btn-success btn-search" type="submit" id="btnDeleteAcct" name="btnDeleteAcct" tabindex="22" value='Delete'  onclick="return deleteCreditCard();"/>
+									<i class="icon-check white"></i>
 								</span>
 							</td>
 						</tr>
 					</#if>
 			
 	</table>
-	</@form.form>
-		<#else>
-			<span class="red"><i class="icon-warning-sign red"></i>&nbsp;No Credit Card Information Available</span>
-		</#if>
-</div>
-
+	</form>
+  </div>
+ </#list>
+ </div>
 <script type="text/javascript">
-
-	<#if creditCardForm?has_content>
-	function updateCreditCard(){
-
-		var validationErr = '';
-		var expMonth = $('#expMonthS').val();
-		if(isNaN(expMonth) || (expMonth < 1 || expMonth > 12)){
-			validationErr = 'Expired Month Value is Invalid !';
-		}
-		var expYear = $('#expYear').val();
-		if(isNaN(expYear) || expYear < 1900){
-			if(validationErr == ''){
-				validationErr = 'Expired Year Value is Invalid !';
-			} else {
-				validationErr = validationErr + '<br/>Expired Year Value is Invalid !';
-			}
-		}
-
-		if(validationErr != ''){
-			 $.prompt('<font><b>Please correct the errors below</b></font><br/><br/><font color="red">' + validationErr + '</font>');
-			 return false;
-		}
-
-		var ccForm = $('#frmccinfo');
-	 	var serializedData = ccForm.serialize();
-
-	 	 $.ajax({
-	 	 	cache: false,
-	        url: "updatecreditcard.admin?userName=${userName}",
-	        type: "POST",
-	        dataType: "json",
-	        data: serializedData,
-	        success: function (data) {
-	        		var err = 'false';
-	        		var errorStr = '';
-			    	  $.each(data, function(i,item){
-			    		 if (item.code == "SUCCESS") {
-			    		 	$.prompt('Credit Card Information Updated Successfully.');
-			    		 } else {
-			    		 	if(errorStr != ''){
-			    		 		errorStr = errorStr + '<br/>' + item.description;
-			    		 	} else {
-			    		 		errorStr = item.description + '';
-			    		 	}
-			    		 	err = 'true';
-			    		 }
-			    	});
-			    	if(err == 'true'){
-			    		errorStr = '<font><b>Please correct the errors below</b></font><br/><br/><font color="red">' + errorStr + '</font>';
-			    		$.prompt(errorStr);
-			    	}
-	        }
-
-		});
-		return false;
-	}
-	</#if>
-
-		$(document).ready(function() {
-		    $('#frmccinfo').validationEngine();
-		    $('#frmccinfo').validationEngine('hide');
-
-		});
-
-
-
+$(function() {
+    $( "#accordion" ).accordion({
+      collapsible: true
+    });
+  });
 </script>
+
+
+
+
+
+
+
+
+  

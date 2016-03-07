@@ -54,8 +54,9 @@
     <logger level="WARN" name="com.atomikos"/>
     <logger level="WARN" name="org.hibernate"/>
 
-	<root level="WARN">
+	<root level="DEBUG">
 	    <!-- Commented for Prod <appender-ref ref="STDOUT"/>  -->
+	    <appender-ref ref="STDOUT"/>
 	    <appender-ref ref="FILE"/>
 		<appender-ref ref="EMAIL"/>
 	</root>

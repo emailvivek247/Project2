@@ -378,23 +378,44 @@ public class EComUserManagementController extends AbstractBaseController {
     }
 
 
+    /*@RequestMapping(value="/getCreditCardDetails.admin")
+    public ModelAndView getCreditCardDetails(HttpServletRequest request, @RequestParam(required = false) String userName) {
+        ModelAndView modelAndView = this.getModelAndView(request, VIEW_CREDIT_CARD_DETAILS);
+        if (!StringUtils.isBlank(userName)) {
+        	List<CreditCard>  creditCardList = this.serviceStub.getCreditCardDetailsByUserName(userName);
+        	if(creditCardList !=null ) {
+        		List<CreditCardForm>  creditCardFormList = new LinkedList<CreditCardForm>();
+        		for (CreditCard creditCard : creditCardList) {
+        			if (creditCard != null) {
+        				CreditCardForm creditCardForm = this.buildCreditCardForm(creditCard);
+        				creditCardFormList.add(creditCardForm);
+    	            }
+				}
+        		modelAndView.addObject("userName", userName);
+            	modelAndView.addObject("user", request.getRemoteUser());
+                modelAndView.addObject("creditCardFormList", creditCardFormList);	            
+        	}
+        } else {
+            modelAndView.setViewName(LOGINSUCCESS);
+        }
+        return modelAndView;
+    }*/
+
     @RequestMapping(value="/getCreditCardDetails.admin")
     public ModelAndView getCreditCardDetails(HttpServletRequest request, @RequestParam(required = false) String userName) {
         ModelAndView modelAndView = this.getModelAndView(request, VIEW_CREDIT_CARD_DETAILS);
         if (!StringUtils.isBlank(userName)) {
-        	CreditCard cardInfo = this.serviceStub.getCreditCardDetailsByUserName(userName);
-            if (cardInfo != null) {
-            	CreditCardForm creditCardForm = this.buildCreditCardForm(cardInfo);
-            	modelAndView.addObject("userName", userName);
+        	List<CreditCard>  creditCardList = this.serviceStub.getCreditCardDetailsByUserName(userName);
+        	if(creditCardList !=null ) {
+        		   		modelAndView.addObject("userName", userName);
             	modelAndView.addObject("user", request.getRemoteUser());
-                modelAndView.addObject("creditCardForm", creditCardForm);
-            }
+                modelAndView.addObject("creditCardList", creditCardList);	            
+        	}
         } else {
             modelAndView.setViewName(LOGINSUCCESS);
         }
         return modelAndView;
     }
-
 
 
     @RequestMapping(value="/viewecomuserdetails.admin")
@@ -814,6 +835,48 @@ public class EComUserManagementController extends AbstractBaseController {
         return errors;
     }
 
+	@RequestMapping(value="/deleteCreditcard.admin", produces="application/json")
+    @ResponseBody
+    public List<ErrorCodeDTO> deleteCreditcard(HttpServletRequest request, @ModelAttribute("creditCardForm") @Valid CreditCardForm creditCardForm,
+    					@RequestParam(required = false) String userName, BindingResult bindingResult) {
+        List<ErrorCodeDTO> errors = new LinkedList<ErrorCodeDTO>();
+        String verificationResult = verifyBindingInJSON(bindingResult);
+        if (verificationResult != null) {
+            ErrorCodeDTO error = new ErrorCodeDTO();
+            error.setCode("ERROR");
+            error.setDescription(this.getMessage("system.invalid.data"));
+            errors.add(error);
+            return errors;
+        }
+        validate(creditCardForm, bindingResult, DefaultGroup.class);
+//        if (bindingResult.hasErrors()) {
+//            errors = this.populateErrorCodes(bindingResult.getFieldErrors());
+//        }
+        creditCardValidator.validate(creditCardForm, bindingResult);
+        if (bindingResult.hasErrors()) {
+            errors.addAll(this.populateErrorCodes(bindingResult.getFieldErrors()));
+        }
+        if (errors != null && errors.size() > 0) {
+            return errors;
+        }
+        CreditCard creditCardInfo = buildCreditCard(creditCardForm, request);
+        try {
+            this.getServiceStub().updateExistingCreditCardInformation(userName, request.getRemoteUser(), creditCardInfo);
+        } catch (PaymentGatewayUserException payPalUserException) {
+            bindingResult.rejectValue("ERROR", "paypal.errorcode." + payPalUserException.getErrorCode());
+        } catch (PaymentGatewaySystemException payPalSystemException) {
+            bindingResult.rejectValue("ERROR", "paypal.errorcode.generalsystemerror");
+        }
+        if (bindingResult.hasErrors()) {
+            return this.populateErrorCodes(bindingResult.getFieldErrors());
+        }
+        ErrorCodeDTO errorCode = new ErrorCodeDTO();
+        errorCode.setCode("SUCCESS");
+        errorCode.setDescription(this.getMessage("ecom.creditcard.updatesuccess"));
+        errors.add(errorCode);
+        return errors;
+    }
+	
     @RequestMapping(value="/getsubscriptionsbysite.admin", method=RequestMethod.GET,  produces="application/json")
     @ResponseBody
     public List<Access> getAccesForSite(@RequestParam(required = false) String siteId) {
@@ -985,6 +1048,7 @@ public class EComUserManagementController extends AbstractBaseController {
 
     private CreditCard buildCreditCard(CreditCardForm creditCardForm, HttpServletRequest request) {
         CreditCard creditCard = new CreditCard();
+        creditCard.setId(creditCardForm.getCcid());
         creditCard.setName(creditCardForm.getAccountName());
         creditCard.setNumber(creditCardForm.getNumber());
         creditCard.setExpiryMonth(creditCardForm.getExpMonth());
@@ -1002,6 +1066,7 @@ public class EComUserManagementController extends AbstractBaseController {
 
     private CreditCardForm buildCreditCardForm(CreditCard creditCard) {
         CreditCardForm creditCardForm = new CreditCardForm();
+        creditCardForm.setCcid(creditCard.getId());
         creditCardForm.setAccountName(creditCard.getName());
         creditCardForm.setNumber(creditCard.getNumber());
         creditCardForm.setAddressLine1(creditCard.getAddressLine1());
@@ -1247,6 +1312,7 @@ public class EComUserManagementController extends AbstractBaseController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setAllowedFields(new String[] {
+        	"ccid",
             "userName",
             "username",
             "firstName",

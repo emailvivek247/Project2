@@ -6,7 +6,10 @@ import java.security.Provider;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +31,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.ldap.userdetails.LdapUserDetailsImpl;
 
+import com.fdt.ecom.entity.CreditCard;
 import com.fdt.ecom.entity.enums.CardType;
 
 public class SystemUtil {
@@ -101,6 +105,41 @@ public class SystemUtil {
             parseException.printStackTrace();
         }
         return outputDateStr;
+    }
+    
+    public static Boolean isCardExpired(CreditCard creditCard) {
+        Integer expiryYear = creditCard.getExpiryYear();
+        Integer expiryMonth = creditCard.getExpiryMonth();
+        LocalDate expiryDate = LocalDate.of(expiryYear, expiryMonth, 1).with(TemporalAdjusters.lastDayOfMonth());
+        return expiryDate.compareTo(LocalDate.now()) < 0;
+    }
+
+    public static Boolean areAllCardsExpired(List<CreditCard> creditCardList) {
+        return creditCardList.stream().allMatch(c -> SystemUtil.isCardExpired(c));
+    }
+
+    public static String getExpirationDate(CreditCard creditCard) {
+        Integer expiryYear = creditCard.getExpiryYear();
+        Integer expiryMonth = creditCard.getExpiryMonth();
+        LocalDate expiryDate = LocalDate.of(expiryYear, expiryMonth, 1);
+        java.time.format.DateTimeFormatter formatter = 
+                java.time.format.DateTimeFormatter.ofPattern("MM/yyyy");
+        return expiryDate.format(formatter);
+    }
+    
+    public static String getExpirationMonth(CreditCard creditCard) {
+    	if(creditCard.getExpiryMonth() < 10){
+           return ("0" + (creditCard.getExpiryMonth().toString()));
+        }else {
+        	return (creditCard.getExpiryMonth().toString());
+        }
+    }
+    
+    public static String getAccountNumber(CreditCard creditCard) {
+    	String number = creditCard.getNumber();
+    	int length = number.length();
+        number = number.replace(number.substring(0, length-4), "XXXX-XXXX-XXXX-");
+        return number;
     }
 
     public static String getBuildVersion() {

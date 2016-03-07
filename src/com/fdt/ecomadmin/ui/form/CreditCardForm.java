@@ -16,6 +16,8 @@ public class CreditCardForm {
 
     }
 
+    private Long ccid = null;
+    
     private static String NEW_CREDIT_CARD = "N";
 
     private String useExistingAccount = NEW_CREDIT_CARD;
@@ -211,5 +213,14 @@ public class CreditCardForm {
         this.expYear = expYear;
     }
 
+	public Long getCcid() {
+		return ccid;
+	}
 
+	public void setCcid(Long ccid) {
+		this.ccid = ccid;
+	}
+
+	
+    
 }

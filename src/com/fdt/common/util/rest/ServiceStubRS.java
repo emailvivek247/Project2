@@ -508,22 +508,24 @@ public class ServiceStubRS {
 		return oTCTransaction;
 	}
 
-	public CreditCard getCreditCardDetails(Long userId) {
-		CreditCard creditCard = null;
+	public List<CreditCard> getCreditCardDetails(Long userId) {
+		List<CreditCard> creditCardList = null;
 		String url = this.ecomRestURL.concat("getCreditCardDetails/{userId}");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userId", userId);
-		creditCard = restTemplate.getForObject(url, CreditCard.class, paramMap);
-		return creditCard;
+		CreditCard[] creditCardArray = restTemplate.getForObject(url, CreditCard[].class, paramMap);
+		creditCardList = Arrays.asList(creditCardArray);
+		return creditCardList;
 	}
 
-	public CreditCard getCreditCardDetailsByUserName(String userName) {
-		CreditCard creditCard = null;
+	public List<CreditCard>  getCreditCardDetailsByUserName(String userName) {
+		List<CreditCard> creditCardList = null;
 		String url = this.ecomRestURL.concat("getCreditCardDetailsByUserName/{userName}");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userName", userName);
-		creditCard = restTemplate.getForObject(url, CreditCard.class, paramMap);
-		return creditCard;
+		CreditCard[] creditCardArray = restTemplate.getForObject(url, CreditCard[].class, paramMap);
+		creditCardList = Arrays.asList(creditCardArray);
+		return creditCardList;
 	}
 
 	public List<RecurTx> getRecurTransactions(String userName, Long siteId) {
