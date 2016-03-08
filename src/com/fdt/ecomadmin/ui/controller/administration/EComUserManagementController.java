@@ -837,43 +837,21 @@ public class EComUserManagementController extends AbstractBaseController {
 
 	@RequestMapping(value="/deleteCreditcard.admin", produces="application/json")
     @ResponseBody
-    public List<ErrorCodeDTO> deleteCreditcard(HttpServletRequest request, @ModelAttribute("creditCardForm") @Valid CreditCardForm creditCardForm,
-    					@RequestParam(required = false) String userName, BindingResult bindingResult) {
+    public List<ErrorCodeDTO> deleteCreditcard(HttpServletRequest request, @RequestParam(required = false) String userName, @RequestParam(required = false) String ccid) {
         List<ErrorCodeDTO> errors = new LinkedList<ErrorCodeDTO>();
-        String verificationResult = verifyBindingInJSON(bindingResult);
-        if (verificationResult != null) {
-            ErrorCodeDTO error = new ErrorCodeDTO();
-            error.setCode("ERROR");
-            error.setDescription(this.getMessage("system.invalid.data"));
-            errors.add(error);
-            return errors;
-        }
-        validate(creditCardForm, bindingResult, DefaultGroup.class);
-//        if (bindingResult.hasErrors()) {
-//            errors = this.populateErrorCodes(bindingResult.getFieldErrors());
-//        }
-        creditCardValidator.validate(creditCardForm, bindingResult);
-        if (bindingResult.hasErrors()) {
-            errors.addAll(this.populateErrorCodes(bindingResult.getFieldErrors()));
-        }
-        if (errors != null && errors.size() > 0) {
-            return errors;
-        }
-        CreditCard creditCardInfo = buildCreditCard(creditCardForm, request);
+        
         try {
-            this.getServiceStub().updateExistingCreditCardInformation(userName, request.getRemoteUser(), creditCardInfo);
-        } catch (PaymentGatewayUserException payPalUserException) {
-            bindingResult.rejectValue("ERROR", "paypal.errorcode." + payPalUserException.getErrorCode());
-        } catch (PaymentGatewaySystemException payPalSystemException) {
-            bindingResult.rejectValue("ERROR", "paypal.errorcode.generalsystemerror");
-        }
-        if (bindingResult.hasErrors()) {
-            return this.populateErrorCodes(bindingResult.getFieldErrors());
-        }
-        ErrorCodeDTO errorCode = new ErrorCodeDTO();
-        errorCode.setCode("SUCCESS");
-        errorCode.setDescription(this.getMessage("ecom.creditcard.updatesuccess"));
-        errors.add(errorCode);
+            this.getServiceStub().removeCard(userName, ccid);
+            ErrorCodeDTO errorCode = new ErrorCodeDTO();
+            errorCode.setCode("SUCCESS");
+            errorCode.setDescription("Credit Card Deleted Successfully.");
+            errors.add(errorCode);
+        } catch (Exception payPalSystemException) {
+        	ErrorCodeDTO errorCode = new ErrorCodeDTO();
+            errorCode.setCode("SUCCESS");
+            errorCode.setDescription("Something Went Wrong! ");
+            errors.add(errorCode);
+        }        
         return errors;
     }
 	
