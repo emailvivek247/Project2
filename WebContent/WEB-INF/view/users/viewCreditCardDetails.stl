@@ -104,7 +104,9 @@
 								<span id="SUCCESS"></span>
 								<span class="input-icon">
 									<input class="btn btn-small btn-success btn-search" type="submit" id="btnUpdateAcct" name="btnUpdateAcct" tabindex="27" value='Update'  onclick="return updateCreditCard();"/>
-									<i class="icon-check white"></i>
+									<i class="icon-check white"></i>									
+								</span>
+								<span class="input-icon">
 									<input class="btn btn-small btn-success btn-search" type="submit" id="btnDeleteAcct" name="btnDeleteAcct" tabindex="28" value='Delete'  onclick="return deleteCreditCard();"/>
 									<i class="icon-check white"></i>
 								</span>
@@ -210,7 +212,7 @@
 								<span id="ERROR"></span>
 								<span id="SUCCESS"></span>
 								<span class="input-icon">
-									<input class="btn btn-small btn-success btn-search" type="submit" id="btnAddAcct" name="btnAddAcct" tabindex="40" value='Update'  onclick="return updateCreditCard();"/>
+									<input class="btn btn-small btn-success btn-search" type="submit" id="btnAddAcct" name="btnAddAcct" tabindex="40" value='Add Card'  onclick="return updateCreditCard();"/>
 									<i class="icon-check white"></i>									
 								</span>
 							</td>
@@ -260,14 +262,14 @@
 			    	  $.each(data, function(i,item){
 			    		 if (item.code == "SUCCESS") {
 			    		 	$.prompt('Credit Card Information Updated Successfully.');
-							refreshCreditCardChanges(userName)
+							refreshCreditCardChanges("${userName}");
 			    		 } else {
 			    		 	if(errorStr != ''){
 			    		 		errorStr = errorStr + '<br/>' + item.description;
 			    		 	} else {
 			    		 		errorStr = item.description + '';
 			    		 	}
-			    		 	err = 'true';
+			    		 	err = 'true';							
 			    		 }
 			    	});
 			    	if(err == 'true'){
@@ -296,6 +298,7 @@
 			    	  $.each(data, function(i,item){
 			    		 if (item.code == "SUCCESS") {
 			    		 	$.prompt('Credit Card Information Deleted Successfully.');
+							refreshCreditCardChanges("${userName}");
 			    		 } else {
 			    		 	if(errorStr != ''){
 			    		 		errorStr = errorStr + '<br/>' + item.description;
