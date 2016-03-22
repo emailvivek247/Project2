@@ -807,9 +807,12 @@ public class EComUserManagementController extends AbstractBaseController {
             return errors;
         }
         validate(creditCardForm, bindingResult, DefaultGroup.class);
-//        if (bindingResult.hasErrors()) {
-//            errors = this.populateErrorCodes(bindingResult.getFieldErrors());
-//        }
+        if (bindingResult.hasErrors()) {
+            errors = this.populateErrorCodes(bindingResult.getFieldErrors());
+        }
+        if (errors != null && errors.size() > 0) {
+            return errors;
+        }
         creditCardValidator.validate(creditCardForm, bindingResult);
         if (bindingResult.hasErrors()) {
             errors.addAll(this.populateErrorCodes(bindingResult.getFieldErrors()));
